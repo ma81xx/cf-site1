@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SafeWork RSPP – Consulenza Sicurezza sul Lavoro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink:    #0e0f11;
+    --steel:  #1c1f26;
+    --panel:  #242830;
+    --mist:   #b8bcc8;
+    --fog:    #6b7080;
+    --amber:  #f5a623;
+    --amber2: #e08a00;
+    --white:  #f0f1f3;
+    --danger: #d94f3b;
+    --ff-head: 'Barlow Condensed', sans-serif;
+    --ff-body: 'Lora', serif;
+    --ff-mono: 'JetBrains Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--white);
+    font-family: var(--ff-body);
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: .03;
+    pointer-events: none;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw;
+    height: 72px;
+    background: rgba(14,15,17,.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(245,166,35,.18);
+  }
+
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .logo-badge {
+    width: 36px; height: 36px;
+    background: var(--amber);
+    clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--ff-head);
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+  .logo-text {
+    font-family: var(--ff-head);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .logo-text span { color: var(--amber); }
+
+  nav { display: flex; gap: 2rem; align-items: center; }
+  nav a {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--mist);
+    transition: color .2s;
+    position: relative;
+  }
+  nav a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 1px; background: var(--amber);
+    transform: scaleX(0);
+    transition: transform .25s;
+  }
+  nav a:hover { color: var(--white); }
+  nav a:hover::after { transform: scaleX(1); }
+
+  .nav-cta {
+    background: var(--amber);
+    color: var(--ink) !important;
+    padding: 8px 20px;
+    font-family: var(--ff-head) !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    clip-path: polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+    transition: background .2s;
+  }
+  .nav-cta:hover { background: var(--amber2); }
+  .nav-cta::after { display: none !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 5vw 80px;
+    position: relative;
+    overflow: hidden;
+    gap: 4rem;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    right: -60px; top: 50%;
+    transform: translateY(-50%);
+    width: 520px; height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,166,35,.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* diagonal grid lines */
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(245,166,35,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,166,35,.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-content { position: relative; z-index: 1; }
+
+  .eyebrow {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    animation: fadeUp .6s .2s forwards;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--amber);
+  }
+
+  h1 {
+    font-family: var(--ff-head);
+    font-weight: 800;
+    font-size: clamp(54px, 7vw, 96px);
+    line-height: .95;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp .6s .35s forwards;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--amber);
+  }
+  h1 .outline {
+    -webkit-text-stroke: 1px var(--white);
+    color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--mist);
+    max-width: 440px;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp .6s .5s forwards;
+  }
+
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp .6s .65s forwards;
+  }
+
+  .btn-primary {
+    background: var(--amber);
+    color: var(--ink);
+    font-family: var(--ff-head);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    clip-path: polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+    transition: background .2s, transform .15s;
+    cursor: pointer; border: none;
+  }
+  .btn-primary:hover { background: var(--amber2); transform: translateY(-2px); }
+
+  .btn-ghost {
+    border: 1px solid rgba(245,166,35,.4);
+    color: var(--amber);
+    font-family: var(--ff-head);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    background: transparent;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+  }
+  .btn-ghost:hover { border-color: var(--amber); background: rgba(245,166,35,.08); }
+
+  /* hero stats */
+  .hero-stats {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: rgba(245,166,35,.1);
+    border: 1px solid rgba(245,166,35,.15);
+    opacity: 0;
+    animation: fadeUp .6s .8s forwards;
+  }
+  .stat-box {
+    padding: 2rem 1.8rem;
+    background: var(--steel);
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--ff-head);
+    font-weight: 800;
+    font-size: 52px;
+    line-height: 1;
+    color: var(--amber);
+    display: block;
+  }
+  .stat-label {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--fog);
+    margin-top: .4rem;
+    display: block;
+  }
+  .stat-desc {
+    font-size: 13px;
+    color: var(--mist);
+    margin-top: .6rem;
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 100px 5vw; position: relative; }
+
+  .section-label {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 1rem;
+  }
+  .section-label::before { content: ''; width: 32px; height: 1px; background: var(--amber); }
+
+  h2 {
+    font-family: var(--ff-head);
+    font-weight: 800;
+    font-size: clamp(38px, 5vw, 64px);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: -.01em;
+    margin-bottom: 1rem;
+  }
+  h2 em { font-style: normal; color: var(--amber); }
+
+  .section-intro {
+    font-size: 17px; color: var(--mist);
+    max-width: 540px;
+    margin-bottom: 4rem;
+  }
+
+  /* ── SERVICES ── */
+  .services { background: var(--steel); }
+
+  .services-header { max-width: 700px; }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: rgba(245,166,35,.1);
+    border: 1px solid rgba(245,166,35,.1);
+  }
+
+  .service-card {
+    background: var(--panel);
+    padding: 2.4rem;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: background .25s;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--amber);
+    transition: height .3s;
+  }
+  .service-card:hover { background: rgba(245,166,35,.05); }
+  .service-card:hover::before { height: 100%; }
+
+  .service-icon {
+    font-size: 28px; margin-bottom: 1.2rem;
+    display: inline-block;
+    filter: grayscale(1) brightness(2);
+  }
+  .service-card:hover .service-icon { filter: none; }
+
+  .service-card h3 {
+    font-family: var(--ff-head);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    margin-bottom: .8rem;
+  }
+  .service-card p { font-size: 15px; color: var(--mist); line-height: 1.65; }
+
+  .service-tag {
+    display: inline-block;
+    margin-top: 1.4rem;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border: 1px solid rgba(245,166,35,.3);
+    padding: 4px 10px;
+  }
+
+  /* ── NORMATIVE TICKER ── */
+  .ticker-wrap {
+    background: var(--amber);
+    overflow: hidden;
+    padding: 12px 0;
+  }
+  .ticker {
+    display: flex; gap: 3rem;
+    animation: ticker 28s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-item {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .ticker-item::before { content: '◆'; font-size: 8px; }
+
+  @keyframes ticker { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+
+  /* ── PROCESS ── */
+  .process { background: var(--ink); }
+
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    margin-top: 3rem;
+    position: relative;
+  }
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    top: 36px; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  }
+
+  .process-step {
+    text-align: center;
+    padding: 0 1rem;
+    position: relative;
+  }
+  .step-num {
+    width: 72px; height: 72px;
+    background: var(--steel);
+    border: 1px solid rgba(245,166,35,.3);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-family: var(--ff-head);
+    font-weight: 800;
+    font-size: 28px;
+    color: var(--amber);
+    position: relative; z-index: 1;
+    transition: background .25s, border-color .25s;
+  }
+  .process-step:hover .step-num {
+    background: var(--amber);
+    color: var(--ink);
+    border-color: var(--amber);
+  }
+  .step-title {
+    font-family: var(--ff-head);
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: .5rem;
+  }
+  .step-desc { font-size: 13px; color: var(--fog); line-height: 1.55; }
+
+  /* ── NORMATIVE COVERAGE ── */
+  .norms { background: var(--steel); }
+
+  .norms-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: rgba(245,166,35,.08);
+  }
+  .norm-item {
+    background: var(--panel);
+    padding: 2rem;
+    display: flex; gap: 1.5rem; align-items: flex-start;
+    transition: background .2s;
+  }
+  .norm-item:hover { background: rgba(245,166,35,.04); }
+  .norm-code {
+    font-family: var(--ff-mono);
+    font-size: 13px;
+    color: var(--amber);
+    background: rgba(245,166,35,.1);
+    padding: 6px 12px;
+    border: 1px solid rgba(245,166,35,.2);
+    flex-shrink: 0;
+    margin-top: 2px;
+    letter-spacing: .08em;
+  }
+  .norm-item h4 {
+    font-family: var(--ff-head);
+    font-weight: 700;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: .4rem;
+  }
+  .norm-item p { font-size: 14px; color: var(--mist); line-height: 1.55; }
+
+  /* ── ABOUT ── */
+  .about { background: var(--ink); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .about-visual {
+    position: relative;
+    height: 440px;
+  }
+  .about-visual-inner {
+    width: 100%; height: 100%;
+    background: var(--steel);
+    border: 1px solid rgba(245,166,35,.15);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-visual-inner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 30px,
+        rgba(245,166,35,.03) 30px,
+        rgba(245,166,35,.03) 31px
+      );
+  }
+  .cert-badge {
+    background: var(--panel);
+    border: 1px solid rgba(245,166,35,.25);
+    padding: 1rem 1.6rem;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    display: flex; align-items: center; gap: .8rem;
+    position: relative; z-index: 1;
+    transition: border-color .2s;
+  }
+  .cert-badge:hover { border-color: var(--amber); }
+  .cert-dot {
+    width: 8px; height: 8px;
+    background: var(--amber);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.5); opacity: .6; }
+  }
+
+  .about-text .section-label { margin-top: 0; }
+  .about-text p { color: var(--mist); margin-bottom: 1rem; font-size: 16px; }
+  .about-text p strong { color: var(--white); font-weight: 600; }
+
+  .cv-line {
+    display: flex; gap: 1rem; align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    font-size: 14px; color: var(--mist);
+  }
+  .cv-line:first-child { border-top: 1px solid rgba(255,255,255,.06); margin-top: 1.5rem; }
+  .cv-year {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    color: var(--amber);
+    flex-shrink: 0;
+    width: 48px;
+  }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { background: var(--steel); }
+
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(245,166,35,.08);
+  }
+  .testi-card {
+    background: var(--panel);
+    padding: 2.5rem;
+    position: relative;
+  }
+  .testi-card::before {
+    content: '"';
+    position: absolute;
+    top: 1.5rem; right: 2rem;
+    font-family: var(--ff-head);
+    font-size: 80px;
+    line-height: 1;
+    color: rgba(245,166,35,.12);
+    font-weight: 800;
+  }
+  .testi-text {
+    font-size: 15px;
+    color: var(--mist);
+    line-height: 1.7;
+    margin-bottom: 1.8rem;
+    font-style: italic;
+  }
+  .testi-author {
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .testi-avatar {
+    width: 44px; height: 44px;
+    background: var(--amber);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--ff-head);
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--ink);
+    flex-shrink: 0;
+    clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  }
+  .testi-name {
+    font-family: var(--ff-head);
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .testi-role { font-size: 12px; color: var(--fog); font-family: var(--ff-mono); }
+
+  /* ── FAQ ── */
+  .faq { background: var(--ink); }
+  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(245,166,35,.08); }
+  .faq-item {
+    background: var(--steel);
+    padding: 2rem 2.2rem;
+  }
+  .faq-q {
+    font-family: var(--ff-head);
+    font-weight: 700;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    margin-bottom: .8rem;
+    color: var(--white);
+  }
+  .faq-a { font-size: 14px; color: var(--mist); line-height: 1.65; }
+
+  /* ── CONTACT ── */
+  .contact { background: var(--panel); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .contact-info h3 {
+    font-family: var(--ff-head);
+    font-weight: 700;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: 2rem;
+  }
+  .contact-row {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+  .contact-row:last-child { border-bottom: none; }
+  .contact-icon {
+    font-size: 18px; flex-shrink: 0; margin-top: 2px;
+  }
+  .contact-row small {
+    display: block;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: .3rem;
+  }
+  .contact-row strong { font-size: 16px; }
+
+  form { display: flex; flex-direction: column; gap: 1rem; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  label {
+    display: flex; flex-direction: column; gap: 6px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--fog);
+  }
+  input, textarea, select {
+    background: var(--steel);
+    border: 1px solid rgba(245,166,35,.15);
+    color: var(--white);
+    padding: 12px 14px;
+    font-family: var(--ff-body);
+    font-size: 15px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--amber); }
+  select option { background: var(--steel); }
+  textarea { resize: vertical; min-height: 130px; }
+
+  .privacy-check {
+    display: flex; gap: .8rem; align-items: flex-start;
+    font-size: 13px; color: var(--fog); flex-direction: row;
+    font-family: var(--ff-body);
+    font-weight: normal;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .privacy-check input { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; accent-color: var(--amber); }
+  .privacy-check a { color: var(--amber); text-decoration: underline; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    padding: 60px 5vw 30px;
+    border-top: 1px solid rgba(245,166,35,.12);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  .footer-col h4 {
+    font-family: var(--ff-head);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.2rem;
+  }
+  .footer-col p { font-size: 14px; color: var(--fog); line-height: 1.7; }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: .6rem; }
+  .footer-links a {
+    font-size: 14px;
+    color: var(--fog);
+    transition: color .2s;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+  }
+  .footer-links a:hover { color: var(--amber); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,.06);
+    padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--ff-mono); font-size: 11px; color: var(--fog);
+    letter-spacing: .1em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity .6s, transform .6s;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { display: none; }
+    .hero { grid-template-columns: 1fr; padding-top: 100px; }
+    .hero-stats { grid-template-columns: 1fr 1fr; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .about-visual { height: 280px; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .norms-grid { grid-template-columns: 1fr; }
+    .faq-grid { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .process-steps::before { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  /* ── MOBILE NAV TOGGLE ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 8px;
+  }
+  .hamburger span {
+    width: 24px; height: 2px;
+    background: var(--amber);
+    transition: all .25s;
+  }
+  @media (max-width: 900px) {
+    .hamburger { display: flex; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-badge">SW</div>
+    <div class="logo-text">Safe<span>Work</span></div>
+  </div>
+  <nav>
+    <a href="#servizi">Servizi</a>
+    <a href="#normative">Normative</a>
+    <a href="#processo">Processo</a>
+    <a href="#chi-siamo">Chi siamo</a>
+    <a href="#contatti" class="nav-cta">Contatto</a>
+  </nav>
+  <div class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" style="padding-top:120px">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="eyebrow">RSPP Esterno Certificato</div>
+    <h1>
+      Sicurezza<br>
+      sul <em>Lavoro</em><br>
+      <span class="outline">Senza</span><br>
+      Compromessi
+    </h1>
+    <p class="hero-sub">
+      Consulenza professionale per la prevenzione e protezione nei luoghi di lavoro.
+      Conformità D.Lgs. 81/2008 garantita, audit, formazione e gestione integrata del rischio.
+    </p>
+    <div class="hero-actions">
+      <a href="#contatti" class="btn-primary">Richiedi una consulenza</a>
+      <a href="#servizi" class="btn-ghost">Esplora i servizi</a>
+    </div>
+  </div>
+  <div class="hero-stats reveal">
+    <div class="stat-box">
+      <span class="stat-num">12+</span>
+      <span class="stat-label">Anni di esperienza</span>
+      <p class="stat-desc">Dal 2012 al fianco delle imprese italiane</p>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">340</span>
+      <span class="stat-label">Aziende clienti</span>
+      <p class="stat-desc">PMI, industria, retail e terziario</p>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">100%</span>
+      <span class="stat-label">Conformità DVR</span>
+      <p class="stat-desc">Zero non conformità gravi rilevate</p>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">48h</span>
+      <span class="stat-label">Tempo di risposta</span>
+      <p class="stat-desc">Intervento garantito entro due giorni</p>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">D.Lgs. 81/2008 – Testo Unico Sicurezza</span>
+    <span class="ticker-item">Direttiva Macchine 2006/42/CE</span>
+    <span class="ticker-item">ISO 45001:2018</span>
+    <span class="ticker-item">D.M. 10/03/1998 – Prevenzione Incendi</span>
+    <span class="ticker-item">OHSAS 18001</span>
+    <span class="ticker-item">Regolamento CE 1907/2006 – REACH</span>
+    <span class="ticker-item">D.Lgs. 81/2008 – Testo Unico Sicurezza</span>
+    <span class="ticker-item">Direttiva Macchine 2006/42/CE</span>
+    <span class="ticker-item">ISO 45001:2018</span>
+    <span class="ticker-item">D.M. 10/03/1998 – Prevenzione Incendi</span>
+    <span class="ticker-item">OHSAS 18001</span>
+    <span class="ticker-item">Regolamento CE 1907/2006 – REACH</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="servizi">
+  <div class="services-header reveal">
+    <div class="section-label">I nostri servizi</div>
+    <h2>Protezione<br><em>integrale</em> per<br>la tua impresa</h2>
+    <p class="section-intro">
+      Dalla valutazione dei rischi alla formazione dei lavoratori, gestiamo ogni aspetto
+      della sicurezza sul lavoro con metodo, precisione e piena conformità normativa.
+    </p>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <span class="service-icon">📋</span>
+      <h3>DVR – Documento di<br>Valutazione Rischi</h3>
+      <p>Redazione, aggiornamento e revisione del DVR in conformità al D.Lgs. 81/2008. Analisi specifica per settore produttivo e mansione.</p>
+      <span class="service-tag">Art. 17 D.Lgs. 81/08</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🔥</span>
+      <h3>Prevenzione<br>Incendi</h3>
+      <p>Valutazione del rischio incendio, predisposizione del Piano di Emergenza, coordinamento con i VVF e gestione delle pratiche CPI.</p>
+      <span class="service-tag">D.M. 10/03/1998</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🎓</span>
+      <h3>Formazione<br>Lavoratori</h3>
+      <p>Corsi di formazione obbligatoria per lavoratori, preposti, dirigenti e RLS. Modalità in presenza, blended e FAD accreditate.</p>
+      <span class="service-tag">Accordo Stato-Regioni</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🏗️</span>
+      <h3>Cantieri e<br>Coordinamento</h3>
+      <p>Coordinatore della Sicurezza in fase di progettazione (CSP) ed esecuzione (CSE). Redazione PSC e POS.</p>
+      <span class="service-tag">D.Lgs. 81/08 Titolo IV</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">⚗️</span>
+      <h3>Rischio Chimico<br>e REACH</h3>
+      <p>Valutazione dell'esposizione ad agenti chimici, biologici e cancerogeni. Gestione schede SDS e conformità REACH/CLP.</p>
+      <span class="service-tag">Reg. CE 1907/2006</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🔍</span>
+      <h3>Audit &amp;<br>Ispezioni</h3>
+      <p>Sopralluoghi periodici, audit di sicurezza, verifica impianti e attrezzature, gestione degli infortuni e analisi delle quasi-perdite.</p>
+      <span class="service-tag">ISO 45001:2018</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🏢</span>
+      <h3>RSPP Esterno<br>in Outsourcing</h3>
+      <p>Nomina come RSPP esterno a norma di legge. Il responsabile del tuo servizio di prevenzione senza costi fissi di struttura.</p>
+      <span class="service-tag">Art. 31 D.Lgs. 81/08</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">📊</span>
+      <h3>Sistema Gestione<br>Sicurezza (SGS)</h3>
+      <p>Implementazione e manutenzione di Sistemi di Gestione Sicurezza secondo ISO 45001. Supporto per la certificazione e audit terzi.</p>
+      <span class="service-tag">ISO 45001 / OHSAS</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">⚡</span>
+      <h3>Rischio Elettrico<br>e Macchine</h3>
+      <p>Valutazione del rischio elettrico, verifica della conformità macchine e attrezzature di lavoro, analisi direttiva 2006/42/CE.</p>
+      <span class="service-tag">Dir. Macchine 2006/42/CE</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="processo">
+  <div class="reveal">
+    <div class="section-label">Come lavoriamo</div>
+    <h2>Un <em>metodo</em><br>collaudato</h2>
+    <p class="section-intro">Cinque fasi chiare, nessuna sorpresa. Dalla prima analisi alla conformità continua.</p>
+  </div>
+  <div class="process-steps reveal">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <div class="step-title">Sopralluogo</div>
+      <p class="step-desc">Visita in loco e raccolta di tutta la documentazione esistente. Intervista ai responsabili.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <div class="step-title">Analisi Rischi</div>
+      <p class="step-desc">Identificazione e valutazione di tutti i rischi presenti, classificazione per priorità.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <div class="step-title">Piano d'azione</div>
+      <p class="step-desc">Definizione delle misure di prevenzione, cronoprogramma e responsabilità.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <div class="step-title">Implementazione</div>
+      <p class="step-desc">Supporto attivo nell'implementazione delle misure e nella formazione del personale.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">05</div>
+      <div class="step-title">Monitoraggio</div>
+      <p class="step-desc">Audit periodici, aggiornamento documentale e reperibilità h24 per le emergenze.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NORMATIVE -->
+<section class="norms" id="normative">
+  <div class="reveal">
+    <div class="section-label">Copertura normativa</div>
+    <h2>Ogni norma,<br><em>coperta</em></h2>
+    <p class="section-intro">Conosciamo ogni riferimento normativo applicabile alla sicurezza sul lavoro in Italia e in Europa.</p>
+  </div>
+  <div class="norms-grid reveal">
+    <div class="norm-item">
+      <span class="norm-code">D.Lgs. 81/08</span>
+      <div>
+        <h4>Testo Unico Sicurezza</h4>
+        <p>La norma cardine della sicurezza sul lavoro italiana. Gestione integrale dalla valutazione dei rischi alla sorveglianza sanitaria.</p>
+      </div>
+    </div>
+    <div class="norm-item">
+      <span class="norm-code">ISO 45001</span>
+      <div>
+        <h4>Sistema Gestione SSL</h4>
+        <p>Standard internazionale per i Sistemi di Gestione della Salute e Sicurezza sul Lavoro. Supporto fino alla certificazione.</p>
+      </div>
+    </div>
+    <div class="norm-item">
+      <span class="norm-code">D.Lgs. 195/03</span>
+      <div>
+        <h4>Abilitazione RSPP</h4>
+        <p>Requisiti di capacità e requisiti professionali per lo svolgimento della funzione di RSPP in piena conformità.</p>
+      </div>
+    </div>
+    <div class="norm-item">
+      <span class="norm-code">Dir. 2006/42</span>
+      <div>
+        <h4>Direttiva Macchine</h4>
+        <p>Valutazione di conformità di macchine e attrezzature. Analisi della direttiva europea recepita in Italia.</p>
+      </div>
+    </div>
+    <div class="norm-item">
+      <span class="norm-code">D.M. 10/03/98</span>
+      <div>
+        <h4>Prevenzione Incendi</h4>
+        <p>Criteri generali di sicurezza antincendio e gestione dell'emergenza nei luoghi di lavoro.</p>
+      </div>
+    </div>
+    <div class="norm-item">
+      <span class="norm-code">Reg. REACH</span>
+      <div>
+        <h4>Sostanze Chimiche</h4>
+        <p>Registrazione, valutazione, autorizzazione e restrizione delle sostanze chimiche. Gestione SDS e classificazione CLP.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="chi-siamo">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-visual-inner">
+        <div class="cert-badge"><span class="cert-dot"></span>RSPP Abilitato – D.Lgs. 195/03</div>
+        <div class="cert-badge"><span class="cert-dot"></span>ISO 45001 Lead Auditor</div>
+        <div class="cert-badge"><span class="cert-dot"></span>CSP / CSE Abilitato – Titolo IV</div>
+        <div class="cert-badge"><span class="cert-dot"></span>Formatore Accreditato Stato-Regioni</div>
+        <div class="cert-badge"><span class="cert-dot"></span>Membro AIAS – Ass. Italiana Sicurezza</div>
+      </div>
+    </div>
+    <div class="about-text reveal">
+      <div class="section-label">Chi siamo</div>
+      <h2>Esperienza.<br><em>Metodo.</em><br>Risultati.</h2>
+      <p>
+        <strong>SafeWork è il punto di riferimento per la sicurezza sul lavoro in outsourcing</strong>
+        per piccole e medie imprese, industrie manifatturiere, cantieri edili e realtà del terziario avanzato.
+      </p>
+      <p>
+        Il nostro team è composto da ingegneri, tecnici della prevenzione e consulenti con specializzazioni
+        in settori ad alto rischio: chimica, edilizia, alimentare, metalmeccanica e logistica.
+      </p>
+      <p>
+        Non siamo solo fornitori di documenti. Siamo <strong>partner operativi</strong> che lavorano al vostro fianco,
+        riducendo concretamente l'esposizione al rischio e i costi di non conformità.
+      </p>
+      <div>
+        <div class="cv-line"><span class="cv-year">2012</span>Fondazione di SafeWork Srl</div>
+        <div class="cv-line"><span class="cv-year">2015</span>Accreditamento come ente di formazione ex Accordo Stato-Regioni</div>
+        <div class="cv-line"><span class="cv-year">2018</span>Certificazione ISO 45001 Lead Auditor per tutto il team senior</div>
+        <div class="cv-line"><span class="cv-year">2021</span>Espansione: apertura sedi a Milano, Torino e Bologna</div>
+        <div class="cv-line"><span class="cv-year">2024</span>340+ clienti attivi, 0 non conformità gravi nel portafoglio</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="reveal">
+    <div class="section-label">Cosa dicono i clienti</div>
+    <h2>Fiducia<br><em>guadagnata</em></h2>
+  </div>
+  <div class="testi-grid reveal">
+    <div class="testi-card">
+      <p class="testi-text">
+        SafeWork ha completamente rivisto il nostro DVR in meno di tre settimane. Il sopralluogo è stato
+        meticoloso e il documento finale ci ha permesso di superare l'ispezione ASL senza rilievi.
+      </p>
+      <div class="testi-author">
+        <div class="testi-avatar">LB</div>
+        <div>
+          <div class="testi-name">Lorenzo Bianchi</div>
+          <div class="testi-role">Direttore Operativo – Meccanica Bianchi Srl</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <p class="testi-text">
+        Gestiamo un cantiere complesso con 12 imprese. Il coordinamento di SafeWork è stato impeccabile:
+        PSC chiaro, riunioni di coordinamento puntuali, nessun infortunio in 18 mesi di lavori.
+      </p>
+      <div class="testi-author">
+        <div class="testi-avatar">MR</div>
+        <div>
+          <div class="testi-name">Marco Romani</div>
+          <div class="testi-role">Responsabile Cantieri – Costruzioni Romani SpA</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <p class="testi-text">
+        Piccola impresa di 8 persone, non potevamo permetterci un RSPP interno. SafeWork ci ha dato
+        tutto il supporto di uno specialista a costi davvero sostenibili. Consigliato.
+      </p>
+      <div class="testi-author">
+        <div class="testi-avatar">AS</div>
+        <div>
+          <div class="testi-name">Anna Sorrentino</div>
+          <div class="testi-role">Titolare – Laboratorio Sorrentino</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="reveal">
+    <div class="section-label">Domande frequenti</div>
+    <h2>Tutto chiaro,<br><em>subito</em></h2>
+    <p class="section-intro">Le risposte alle domande che ci vengono poste più spesso.</p>
+  </div>
+  <div class="faq-grid reveal">
+    <div class="faq-item">
+      <div class="faq-q">Tutte le aziende devono avere un RSPP?</div>
+      <p class="faq-a">Sì. Il D.Lgs. 81/2008 obbliga ogni datore di lavoro a nominare un RSPP, anche in forma esterna. La nomina è un obbligo non delegabile del datore di lavoro.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Qual è la differenza tra RSPP interno ed esterno?</div>
+      <p class="faq-a">L'RSPP interno è un dipendente formato allo scopo. L'RSPP esterno (come SafeWork) è un professionista abilitato che svolge la funzione in outsourcing, con vantaggi di costo e competenza specialistica.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Con quale frequenza va aggiornato il DVR?</div>
+      <p class="faq-a">Il DVR va aggiornato ogni volta che si modificano le attività, l'organizzazione, le tecnologie o in seguito a infortuni. In assenza di variazioni, è buona prassi una revisione annuale.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Quanto costa la consulenza RSPP in outsourcing?</div>
+      <p class="faq-a">Il costo dipende dal numero di lavoratori, dalla complessità del rischio e dai servizi inclusi. Offriamo piani personalizzati a partire da €90/mese per imprese fino a 10 dipendenti.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Siete presenti su tutto il territorio nazionale?</div>
+      <p class="faq-a">Abbiamo sedi a Milano, Torino e Bologna e operiamo su tutto il nord Italia. Per il centro-sud gestiamo i clienti in collaborazione con una rete di partner certificati.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Come funziona la formazione obbligatoria?</div>
+      <p class="faq-a">Eroghiamo corsi in presenza, blended e FAD accreditati secondo l'Accordo Stato-Regioni 2011 e successivi aggiornamenti. Rilasciamo attestati validi su tutto il territorio nazionale.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contatti">
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <div class="section-label">Contatti</div>
+      <h2>Parliamo<br>di <em>sicurezza</em></h2>
+      <p style="color:var(--mist);font-size:16px;margin-bottom:2rem;">
+        Siamo disponibili per un primo incontro gratuito e senza impegno.
+        Contattateci per un preventivo personalizzato.
+      </p>
+      <h3>Dove siamo</h3>
+      <div class="contact-row">
+        <span class="contact-icon">📍</span>
+        <div>
+          <small>Sede principale</small>
+          <strong>Via della Prevenzione, 42 – 20124 Milano MI</strong>
+        </div>
+      </div>
+      <div class="contact-row">
+        <span class="contact-icon">📞</span>
+        <div>
+          <small>Telefono</small>
+          <strong>+39 02 1234 5678</strong>
+        </div>
+      </div>
+      <div class="contact-row">
+        <span class="contact-icon">✉️</span>
+        <div>
+          <small>Email</small>
+          <strong>info@safework-rspp.it</strong>
+        </div>
+      </div>
+      <div class="contact-row">
+        <span class="contact-icon">🕒</span>
+        <div>
+          <small>Orari</small>
+          <strong>Lun–Ven: 9:00–18:00 · Reperibilità h24 per emergenze</strong>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <label>Nome *<input type="text" placeholder="Mario Rossi" required/></label>
+          <label>Azienda<input type="text" placeholder="Rossi Srl"/></label>
+        </div>
+        <div class="form-row">
+          <label>Email *<input type="email" placeholder="mario@rossi.it" required/></label>
+          <label>Telefono<input type="tel" placeholder="+39 340 000 0000"/></label>
+        </div>
+        <label>Servizio di interesse
+          <select>
+            <option value="">– Seleziona –</option>
+            <option>RSPP Esterno in Outsourcing</option>
+            <option>DVR – Valutazione Rischi</option>
+            <option>Prevenzione Incendi</option>
+            <option>Formazione Lavoratori</option>
+            <option>Coordinamento Cantieri (CSP/CSE)</option>
+            <option>Audit e Ispezioni</option>
+            <option>Sistema Gestione ISO 45001</option>
+            <option>Altro / Non so ancora</option>
+          </select>
+        </label>
+        <label>Numero di dipendenti
+          <select>
+            <option value="">– Seleziona –</option>
+            <option>1–10 dipendenti</option>
+            <option>11–50 dipendenti</option>
+            <option>51–250 dipendenti</option>
+            <option>Oltre 250 dipendenti</option>
+          </select>
+        </label>
+        <label>Messaggio
+          <textarea placeholder="Descrivete brevemente la vostra attività e le vostre necessità…"></textarea>
+        </label>
+        <label class="privacy-check">
+          <input type="checkbox" required/>
+          Dichiaro di aver letto e accettato la <a href="#">Privacy Policy</a> ai sensi del GDPR (Reg. UE 2016/679).
+        </label>
+        <button type="submit" class="btn-primary" style="width:fit-content">
+          Invia richiesta →
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="logo" style="margin-bottom:1rem">
+        <div class="logo-badge">SW</div>
+        <div class="logo-text">Safe<span>Work</span></div>
+      </div>
+      <p>RSPP Esterno certificato e consulenza integrata per la sicurezza sul lavoro. Al vostro fianco dalla valutazione dei rischi alla conformità continua.</p>
+      <p style="margin-top:1rem;font-size:12px;font-family:var(--ff-mono);letter-spacing:.08em">P.IVA IT 12345678901 · Iscritta CCIAA Milano</p>
+    </div>
+    <div class="footer-col">
+      <h4>Servizi</h4>
+      <ul class="footer-links">
+        <li><a href="#servizi">DVR e Valutazione Rischi</a></li>
+        <li><a href="#servizi">RSPP in Outsourcing</a></li>
+        <li><a href="#servizi">Formazione Obbligatoria</a></li>
+        <li><a href="#servizi">Prevenzione Incendi</a></li>
+        <li><a href="#servizi">Coordinamento Cantieri</a></li>
+        <li><a href="#servizi">ISO 45001</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Sedi</h4>
+      <ul class="footer-links">
+        <li><a href="#">Milano – Sede principale</a></li>
+        <li><a href="#">Torino</a></li>
+        <li><a href="#">Bologna</a></li>
+      </ul>
+      <h4 style="margin-top:1.5rem">Normative</h4>
+      <ul class="footer-links">
+        <li><a href="#">D.Lgs. 81/2008</a></li>
+        <li><a href="#">ISO 45001</a></li>
+        <li><a href="#">Accordo Stato-Regioni</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Azienda</h4>
+      <ul class="footer-links">
+        <li><a href="#chi-siamo">Chi siamo</a></li>
+        <li><a href="#">Blog sicurezza</a></li>
+        <li><a href="#">Lavora con noi</a></li>
+        <li><a href="#contatti">Contatti</a></li>
+      </ul>
+      <h4 style="margin-top:1.5rem">Legale</h4>
+      <ul class="footer-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Cookie Policy</a></li>
+        <li><a href="#">Note legali</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 SafeWork Srl · Tutti i diritti riservati</span>
+    <span>RSPP CERTIFICATO · ISO 45001 LEAD AUDITOR</span>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // stagger children
+        const kids = e.target.querySelectorAll('.service-card, .testi-card, .stat-box, .norm-item, .faq-item, .process-step, .cv-line, .cert-badge');
+        kids.forEach((k, i) => {
+          k.style.transitionDelay = `${i * 0.07}s`;
+          k.classList.add('reveal', 'visible');
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]');
+    btn.textContent = '✓ Richiesta inviata!';
+    btn.style.background = '#27ae60';
+    btn.disabled = true;
+  }
+
+  // Smooth anchor scroll offset for fixed header
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        window.scrollTo({ top: el.offsetTop - 72, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
